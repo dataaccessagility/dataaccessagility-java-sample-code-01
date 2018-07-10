@@ -1,7 +1,6 @@
 package models;
-
 /**
-* No documentation is available
+* Any department, center, unit, or section within the company. Divisions have a hierarchical relationship; where one division could be a parent of another division
 */
 public class Division
 {
@@ -22,7 +21,7 @@ public class Division
 
 	/**
 	* Sets the value of id
-	* @param val No documentation is available
+	* @param val A unique identifier of the division
 	*/
 	public void setId(int val)
 	{
@@ -32,7 +31,7 @@ public class Division
 
 	/**
 	* Returns the value of id
-	* @return No documentation is available
+	* @return A unique identifier of the division
 	*/
 	public int getId()
 	{
@@ -41,7 +40,7 @@ public class Division
 
 	/**
 	* Sets the value of name
-	* @param val No documentation is available
+	* @param val Name of the division including the type (E.g. Sales Department)
 	*/
 	public void setName(String val)
 	{
@@ -51,7 +50,7 @@ public class Division
 
 	/**
 	* Returns the value of name
-	* @return No documentation is available
+	* @return Name of the division including the type (E.g. Sales Department)
 	*/
 	public String getName()
 	{
@@ -60,7 +59,7 @@ public class Division
 
 	/**
 	* Sets the value of parentDivisionId
-	* @param val No documentation is available
+	* @param val Id of the division that this division belongs to (E.g. Local Sales belongs to Sales Department). If this object represents a root division, the value of this attribute is Null.
 	*/
 	public void setParentDivisionId(int val)
 	{
@@ -70,7 +69,7 @@ public class Division
 
 	/**
 	* Returns the value of parentDivisionId
-	* @return No documentation is available
+	* @return Id of the division that this division belongs to (E.g. Local Sales belongs to Sales Department). If this object represents a root division, the value of this attribute is Null.
 	*/
 	public int getParentDivisionId()
 	{
@@ -144,7 +143,6 @@ public class Division
 	{
 		if (((fields & ID_BIT_FLAG) == ID_BIT_FLAG) && isNull(ID_BIT_FLAG)) throw new Exception("id cannot be null!");
 		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && isNull(NAME_BIT_FLAG)) throw new Exception("name cannot be null!");
-		if (((fields & PARENTDIVISIONID_BIT_FLAG) == PARENTDIVISIONID_BIT_FLAG) && isNull(PARENTDIVISIONID_BIT_FLAG)) throw new Exception("parentDivisionId cannot be null!");
 
 		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && !isNull(NAME_BIT_FLAG) && getName().length() > 128) throw new Exception("name length cannot exceed 128");
 	}

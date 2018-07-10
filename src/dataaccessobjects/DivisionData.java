@@ -20,7 +20,8 @@ public class DivisionData
 		{
 			ps.setInt(1, obj.getId());
 			ps.setString(2, obj.getName());
-			ps.setInt(3, obj.getParentDivisionId());
+			if (!obj.isNull(Division.PARENTDIVISIONID_BIT_FLAG)) ps.setInt(3, obj.getParentDivisionId());
+			else ps.setNull(3, Types.INTEGER);
 
 			retVal = ps.executeUpdate();
 
@@ -45,7 +46,8 @@ public class DivisionData
 
 			ps.setInt(1, obj.getId());
 			ps.setString(2, obj.getName());
-			ps.setInt(3, obj.getParentDivisionId());
+			if (!obj.isNull(Division.PARENTDIVISIONID_BIT_FLAG)) ps.setInt(3, obj.getParentDivisionId());
+			else ps.setNull(3, Types.INTEGER);
 
 			retVal = ps.executeUpdate();
 
@@ -77,7 +79,7 @@ public class DivisionData
 
 				obj.setId(rs.getInt("DIVISION_ID"));
 				obj.setName(rs.getString("DIVISION_NAME"));
-				obj.setParentDivisionId(rs.getInt("PARENT_DIVISION_ID"));
+				if (rs.getObject("PARENT_DIVISION_ID") != null) obj.setParentDivisionId(rs.getInt("PARENT_DIVISION_ID"));
 
 				retVal.add(obj);
 			}
@@ -88,7 +90,7 @@ public class DivisionData
 
 	/**
 	* Retrieves a single record from database. The values returned are <code>{@link Division#id id}</code>, <code>{@link Division#name name}</code>, <code>{@link Division#parentDivisionId parentDivisionId}</code>
-	* @param byId (filter parameter) No documentation is available
+	* @param byId (filter parameter) A unique identifier of the division
 	* @return Objects retrieved from database
 	*/
 	public static Division getDivisionById(int byId) throws Exception
@@ -109,7 +111,7 @@ public class DivisionData
 			{
 				retVal.setId(rs.getInt("DIVISION_ID"));
 				retVal.setName(rs.getString("DIVISION_NAME"));
-				retVal.setParentDivisionId(rs.getInt("PARENT_DIVISION_ID"));
+				if (rs.getObject("PARENT_DIVISION_ID") != null) retVal.setParentDivisionId(rs.getInt("PARENT_DIVISION_ID"));
 			}
 			else
 			{

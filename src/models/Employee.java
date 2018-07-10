@@ -1,5 +1,4 @@
 package models;
-
 /**
 * Anyone who works for the company including part-time employees and interns
 */
@@ -10,7 +9,7 @@ public class Employee
 	public static long ID_BIT_FLAG = 1;
 	public static long NAME_BIT_FLAG = 2;
 	public static long BASESALARY_BIT_FLAG = 4;
-	public static long HIRINGDATE_BIT_FLAG = 8;
+	public static long HIREDATE_BIT_FLAG = 8;
 	public static long DIVISIONID_BIT_FLAG = 16;
 
 	private long IS_NULL = Long.MAX_VALUE;
@@ -18,7 +17,7 @@ public class Employee
 	private int id;
 	private String name;
 	private java.math.BigDecimal baseSalary;
-	private java.util.Date hiringDate;
+	private java.util.Date hireDate;
 	private int divisionId;
 	private Division division;
 
@@ -43,7 +42,7 @@ public class Employee
 
 	/**
 	* Sets the value of name
-	* @param val No documentation is available
+	* @param val Full name of the employee; not including the title. Value of this attribute must match the employee's name as it appears on his/her Id
 	*/
 	public void setName(String val)
 	{
@@ -53,7 +52,7 @@ public class Employee
 
 	/**
 	* Returns the value of name
-	* @return No documentation is available
+	* @return Full name of the employee; not including the title. Value of this attribute must match the employee's name as it appears on his/her Id
 	*/
 	public String getName()
 	{
@@ -62,7 +61,7 @@ public class Employee
 
 	/**
 	* Sets the value of baseSalary
-	* @param val No documentation is available
+	* @param val Employee's salary not including bonuses, housing allowance, or any other allowances
 	*/
 	public void setBaseSalary(java.math.BigDecimal val)
 	{
@@ -72,7 +71,7 @@ public class Employee
 
 	/**
 	* Returns the value of baseSalary
-	* @return No documentation is available
+	* @return Employee's salary not including bonuses, housing allowance, or any other allowances
 	*/
 	public java.math.BigDecimal getBaseSalary()
 	{
@@ -80,27 +79,27 @@ public class Employee
 	}
 
 	/**
-	* Sets the value of hiringDate
-	* @param val No documentation is available
+	* Sets the value of hireDate
+	* @param val The date the employee began (Or will begin) work at the company
 	*/
-	public void setHiringDate(java.util.Date val)
+	public void setHireDate(java.util.Date val)
 	{
-		this.hiringDate = val;
-		this.IS_NULL = this.IS_NULL & (Long.MAX_VALUE - HIRINGDATE_BIT_FLAG);
+		this.hireDate = val;
+		this.IS_NULL = this.IS_NULL & (Long.MAX_VALUE - HIREDATE_BIT_FLAG);
 	}
 
 	/**
-	* Returns the value of hiringDate
-	* @return No documentation is available
+	* Returns the value of hireDate
+	* @return The date the employee began (Or will begin) work at the company
 	*/
-	public java.util.Date getHiringDate()
+	public java.util.Date getHireDate()
 	{
-		return this.hiringDate;
+		return this.hireDate;
 	}
 
 	/**
 	* Sets the value of divisionId
-	* @param val No documentation is available
+	* @param val Id of the division that this employee belongs to. Employees can officially work for one division at a time.
 	*/
 	public void setDivisionId(int val)
 	{
@@ -110,7 +109,7 @@ public class Employee
 
 	/**
 	* Returns the value of divisionId
-	* @return No documentation is available
+	* @return Id of the division that this employee belongs to. Employees can officially work for one division at a time.
 	*/
 	public int getDivisionId()
 	{
@@ -153,7 +152,7 @@ public class Employee
 		if (((fields & ID_BIT_FLAG) == ID_BIT_FLAG) && isNull(ID_BIT_FLAG)) throw new Exception("id cannot be null!");
 		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && isNull(NAME_BIT_FLAG)) throw new Exception("name cannot be null!");
 		if (((fields & BASESALARY_BIT_FLAG) == BASESALARY_BIT_FLAG) && isNull(BASESALARY_BIT_FLAG)) throw new Exception("baseSalary cannot be null!");
-		if (((fields & HIRINGDATE_BIT_FLAG) == HIRINGDATE_BIT_FLAG) && isNull(HIRINGDATE_BIT_FLAG)) throw new Exception("hiringDate cannot be null!");
+		if (((fields & HIREDATE_BIT_FLAG) == HIREDATE_BIT_FLAG) && isNull(HIREDATE_BIT_FLAG)) throw new Exception("hireDate cannot be null!");
 		if (((fields & DIVISIONID_BIT_FLAG) == DIVISIONID_BIT_FLAG) && isNull(DIVISIONID_BIT_FLAG)) throw new Exception("divisionId cannot be null!");
 
 		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && !isNull(NAME_BIT_FLAG) && getName().length() > 256) throw new Exception("name length cannot exceed 256");
@@ -167,7 +166,7 @@ public class Employee
 		if (((fields & ID_BIT_FLAG) == ID_BIT_FLAG)) objXmlBuilder.append(String.format("<A>%d</A>", this.getId()));
 		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG)) objXmlBuilder.append(String.format("<B>%s</B>", this.getName()));
 		if (((fields & BASESALARY_BIT_FLAG) == BASESALARY_BIT_FLAG)) objXmlBuilder.append(String.format("<C>%f</C>", this.getBaseSalary()));
-		if (((fields & HIRINGDATE_BIT_FLAG) == HIRINGDATE_BIT_FLAG)) objXmlBuilder.append(String.format("<D>%tD %tT</D>", this.getHiringDate()));
+		if (((fields & HIREDATE_BIT_FLAG) == HIREDATE_BIT_FLAG)) objXmlBuilder.append(String.format("<D>%tD %tT</D>", this.getHireDate()));
 		if (((fields & DIVISIONID_BIT_FLAG) == DIVISIONID_BIT_FLAG)) objXmlBuilder.append(String.format("<E>%d</E>", this.getDivisionId()));
 		objXmlBuilder.append("</Employee>");
 
@@ -182,7 +181,7 @@ public class Employee
 		objXmlBuilder.append(String.format("<A>%d</A>", this.getId()));
 		objXmlBuilder.append(String.format("<B>%s</B>", this.getName()));
 		objXmlBuilder.append(String.format("<C>%f</C>", this.getBaseSalary()));
-		objXmlBuilder.append(String.format("<D>%tD %tT</D>", this.getHiringDate()));
+		objXmlBuilder.append(String.format("<D>%tD %tT</D>", this.getHireDate()));
 		objXmlBuilder.append(String.format("<E>%d</E>", this.getDivisionId()));
 		objXmlBuilder.append("</Employee>");
 
