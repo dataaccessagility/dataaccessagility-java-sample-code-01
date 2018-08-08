@@ -1,27 +1,34 @@
 package models;
 /**
-* Any department, center, unit, or section within the company. Divisions have a hierarchical relationship; where one division could be a parent of another division
+* Any department that has a cost center. A division can have child divisions, and child divisions can also have their own child divisions
 */
 public class Division
 {
 	public static String COLLECTION_XML_DATA_PATH = "/Items/Division";
 
 	public static long ID_BIT_FLAG = 1;
-	public static long NAME_BIT_FLAG = 2;
-	public static long PARENTDIVISIONID_BIT_FLAG = 4;
+	public static long PARENTID_BIT_FLAG = 2;
+	public static long NAME_BIT_FLAG = 4;
 
 	private long IS_NULL = Long.MAX_VALUE;
 
+	/**
+	* No documentation is available
+	*/
 	private int id;
+	/**
+	* No documentation is available
+	*/
+	private int parentId;
+	/**
+	* No documentation is available
+	*/
 	private String name;
-	private int parentDivisionId;
 	private java.util.List<Employee> employees;
-	private Division parentDivision;
-	private java.util.List<Division> divisions;
 
 	/**
 	* Sets the value of id
-	* @param val A unique identifier of the division
+	* @param val No documentation is available
 	*/
 	public void setId(int val)
 	{
@@ -31,7 +38,7 @@ public class Division
 
 	/**
 	* Returns the value of id
-	* @return A unique identifier of the division
+	* @return No documentation is available
 	*/
 	public int getId()
 	{
@@ -39,8 +46,27 @@ public class Division
 	}
 
 	/**
+	* Sets the value of parentId
+	* @param val No documentation is available
+	*/
+	public void setParentId(int val)
+	{
+		this.parentId = val;
+		this.IS_NULL = this.IS_NULL & (Long.MAX_VALUE - PARENTID_BIT_FLAG);
+	}
+
+	/**
+	* Returns the value of parentId
+	* @return No documentation is available
+	*/
+	public int getParentId()
+	{
+		return this.parentId;
+	}
+
+	/**
 	* Sets the value of name
-	* @param val Name of the division including the type (E.g. Sales Department)
+	* @param val No documentation is available
 	*/
 	public void setName(String val)
 	{
@@ -50,30 +76,11 @@ public class Division
 
 	/**
 	* Returns the value of name
-	* @return Name of the division including the type (E.g. Sales Department)
+	* @return No documentation is available
 	*/
 	public String getName()
 	{
 		return this.name;
-	}
-
-	/**
-	* Sets the value of parentDivisionId
-	* @param val Id of the division that this division belongs to (E.g. Local Sales belongs to Sales Department). If this object represents a root division, the value of this attribute is Null.
-	*/
-	public void setParentDivisionId(int val)
-	{
-		this.parentDivisionId = val;
-		this.IS_NULL = this.IS_NULL & (Long.MAX_VALUE - PARENTDIVISIONID_BIT_FLAG);
-	}
-
-	/**
-	* Returns the value of parentDivisionId
-	* @return Id of the division that this division belongs to (E.g. Local Sales belongs to Sales Department). If this object represents a root division, the value of this attribute is Null.
-	*/
-	public int getParentDivisionId()
-	{
-		return this.parentDivisionId;
 	}
 
 	/**
@@ -90,38 +97,6 @@ public class Division
 	public java.util.List<Employee> getEmployees()
 	{
 		return this.employees;
-	}
-
-	/**
-	* Sets the value of parentDivision
-	*/
-	public void setParentDivision(Division val)
-	{
-		this.parentDivision = val;
-	}
-
-	/**
-	* Returns the value of parentDivision
-	*/
-	public Division getParentDivision()
-	{
-		return this.parentDivision;
-	}
-
-	/**
-	* Sets the value of divisions
-	*/
-	public void setDivisions(java.util.List<Division> val)
-	{
-		this.divisions = val;
-	}
-
-	/**
-	* Returns the value of divisions
-	*/
-	public java.util.List<Division> getDivisions()
-	{
-		return this.divisions;
 	}
 
 
@@ -144,7 +119,7 @@ public class Division
 		if (((fields & ID_BIT_FLAG) == ID_BIT_FLAG) && isNull(ID_BIT_FLAG)) throw new Exception("id cannot be null!");
 		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && isNull(NAME_BIT_FLAG)) throw new Exception("name cannot be null!");
 
-		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && !isNull(NAME_BIT_FLAG) && getName().length() > 128) throw new Exception("name length cannot exceed 128");
+		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG) && !isNull(NAME_BIT_FLAG) && getName().length() > 64) throw new Exception("name length cannot exceed 64");
 	}
 
 	public String ToXml(long fields)
@@ -152,9 +127,9 @@ public class Division
 		StringBuilder objXmlBuilder = new StringBuilder();
 
 		objXmlBuilder.append("<Division>");
-		if (((fields & ID_BIT_FLAG) == ID_BIT_FLAG)) objXmlBuilder.append(String.format("<A>%d</A>", this.getId()));
-		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG)) objXmlBuilder.append(String.format("<B>%s</B>", this.getName()));
-		if (((fields & PARENTDIVISIONID_BIT_FLAG) == PARENTDIVISIONID_BIT_FLAG)) objXmlBuilder.append(String.format("<C>%d</C>", this.getParentDivisionId()));
+		if (((fields & ID_BIT_FLAG) == ID_BIT_FLAG)) objXmlBuilder.append(String.format("<A>%d</A>", getId()));
+		if (((fields & PARENTID_BIT_FLAG) == PARENTID_BIT_FLAG)) objXmlBuilder.append(String.format("<B>%d</B>", getParentId()));
+		if (((fields & NAME_BIT_FLAG) == NAME_BIT_FLAG)) objXmlBuilder.append(String.format("<C>%s</C>", getName()));
 		objXmlBuilder.append("</Division>");
 
 		return objXmlBuilder.toString();
@@ -165,9 +140,9 @@ public class Division
 		StringBuilder objXmlBuilder = new StringBuilder();
 
 		objXmlBuilder.append("<Division>");
-		objXmlBuilder.append(String.format("<A>%d</A>", this.getId()));
-		objXmlBuilder.append(String.format("<B>%s</B>", this.getName()));
-		objXmlBuilder.append(String.format("<C>%d</C>", this.getParentDivisionId()));
+		objXmlBuilder.append(String.format("<A>%d</A>", getId()));
+		objXmlBuilder.append(String.format("<B>%d</B>", getParentId()));
+		objXmlBuilder.append(String.format("<C>%s</C>", getName()));
 		objXmlBuilder.append("</Division>");
 
 		return objXmlBuilder.toString();

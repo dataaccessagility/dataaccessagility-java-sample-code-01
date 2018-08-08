@@ -6,7 +6,7 @@ import models.*;
 public class DivisionData
 {
 	/**
-	* Inserts a single record into database. The values inserted are <code>{@link Division#id id}</code>, <code>{@link Division#name name}</code>, <code>{@link Division#parentDivisionId parentDivisionId}</code>
+	* Inserts a single record into database. The values inserted are <code>{@link Division#id id}</code>, <code>{@link Division#parentId parentId}</code>, <code>{@link Division#name name}</code>
 	* @param obj <code>{@link Division}</code> object
 	* @return Number of rows affected
 	*/
@@ -16,21 +16,27 @@ public class DivisionData
 
 		obj.validate();
 
-		try (Connection conn = ConnectionProvider.getConnection(); PreparedStatement ps = conn.prepareStatement("INSERT INTO HR_Division (DIVISION_ID, DIVISION_NAME, PARENT_DIVISION_ID)  VALUES (?, ?, ?)  ;    "))
+		Connection conn = ConnectionProvider.getConnection();
+
+		try (PreparedStatement ps = conn.prepareStatement("INSERT INTO HR_DIVISION (DIVISION_ID, DIVISION_NAME, DIVISION_PARENT_ID)  VALUES (?, ?, ?)  ;    "))
 		{
 			ps.setInt(1, obj.getId());
 			ps.setString(2, obj.getName());
-			if (!obj.isNull(Division.PARENTDIVISIONID_BIT_FLAG)) ps.setInt(3, obj.getParentDivisionId());
+			if (!obj.isNull(Division.PARENTID_BIT_FLAG)) ps.setInt(3, obj.getParentId());
 			else ps.setNull(3, Types.INTEGER);
 
 			retVal = ps.executeUpdate();
 
 			return retVal;
 		}
+		finally
+		{
+			ConnectionProvider.close(conn);
+		}
 	}
 
 	/**
-	* Inserts a single record into database. The values inserted are <code>{@link Division#id id}</code>, <code>{@link Division#name name}</code>, <code>{@link Division#parentDivisionId parentDivisionId}</code>
+	* Inserts a single record into database. The values inserted are <code>{@link Division#id id}</code>, <code>{@link Division#parentId parentId}</code>, <code>{@link Division#name name}</code>
 	* @param txn A database transaction that will be associated with this data access operation
 	* @param obj <code>{@link Division}</code> object
 	* @return Number of rows affected
@@ -41,82 +47,14 @@ public class DivisionData
 
 		obj.validate();
 
-		try (PreparedStatement ps = ((DataAccessTransaction)txn).getConnection().prepareStatement("INSERT INTO HR_Division (DIVISION_ID, DIVISION_NAME, PARENT_DIVISION_ID)  VALUES (?, ?, ?)  ;    "))
+		try (PreparedStatement ps = ((DataAccessTransaction)txn).getConnection().prepareStatement("INSERT INTO HR_DIVISION (DIVISION_ID, DIVISION_NAME, DIVISION_PARENT_ID)  VALUES (?, ?, ?)  ;    "))
 		{
-
 			ps.setInt(1, obj.getId());
 			ps.setString(2, obj.getName());
-			if (!obj.isNull(Division.PARENTDIVISIONID_BIT_FLAG)) ps.setInt(3, obj.getParentDivisionId());
+			if (!obj.isNull(Division.PARENTID_BIT_FLAG)) ps.setInt(3, obj.getParentId());
 			else ps.setNull(3, Types.INTEGER);
 
 			retVal = ps.executeUpdate();
-
-			return retVal;
-		}
-	}
-
-	/**
-	* Retrieves multiple records from database. The values returned for each record are <code>{@link Division#id id}</code>, <code>{@link Division#name name}</code>, <code>{@link Division#parentDivisionId parentDivisionId}</code>
-	* @return Objects retrieved from database
-	*/
-	public static java.util.ArrayList<Division> getAllDivisions() throws Exception
-	{
-		java.util.ArrayList<Division> retVal;
-
-
-		try (Connection conn = ConnectionProvider.getConnection(); PreparedStatement ps = conn.prepareStatement("SELECT DIVISION_ID, DIVISION_NAME, PARENT_DIVISION_ID  FROM HR_Division  ORDER BY DIVISION_NAME ASC  ;  "))
-		{
-
-			retVal = new java.util.ArrayList<Division>();
-
-			if (!ps.execute()) return retVal;
-
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next())
-			{
-				Division obj = new Division();
-
-				obj.setId(rs.getInt("DIVISION_ID"));
-				obj.setName(rs.getString("DIVISION_NAME"));
-				if (rs.getObject("PARENT_DIVISION_ID") != null) obj.setParentDivisionId(rs.getInt("PARENT_DIVISION_ID"));
-
-				retVal.add(obj);
-			}
-
-			return retVal;
-		}
-	}
-
-	/**
-	* Retrieves a single record from database. The values returned are <code>{@link Division#id id}</code>, <code>{@link Division#name name}</code>, <code>{@link Division#parentDivisionId parentDivisionId}</code>
-	* @param byId (filter parameter) A unique identifier of the division
-	* @return Objects retrieved from database
-	*/
-	public static Division getDivisionById(int byId) throws Exception
-	{
-		Division retVal;
-
-
-		try (Connection conn = ConnectionProvider.getConnection(); PreparedStatement ps = conn.prepareStatement("SELECT DIVISION_ID, DIVISION_NAME, PARENT_DIVISION_ID  FROM HR_Division  WHERE (HR_Division.DIVISION_ID = ?)  ;  "))
-		{
-			ps.setInt(1, byId);
-
-			retVal = new Division();
-
-			if (!ps.execute()) return retVal;
-
-			ResultSet rs = ps.getResultSet();
-			if (rs.next())
-			{
-				retVal.setId(rs.getInt("DIVISION_ID"));
-				retVal.setName(rs.getString("DIVISION_NAME"));
-				if (rs.getObject("PARENT_DIVISION_ID") != null) retVal.setParentDivisionId(rs.getInt("PARENT_DIVISION_ID"));
-			}
-			else
-			{
-				retVal = null;
-			}
 
 			return retVal;
 		}

@@ -4,38 +4,38 @@ import java.sql.Connection;
 
 class DataAccessTransaction implements IDataAccessTransaction
 {
-	private Connection _conn;
-	private boolean _committedOrRolledBack;
-	private boolean _disposed;
+	private Connection connection;
+	private boolean committedOrRolledBack;
+	private boolean disposed;
 
 	private void setCommittedOrRolledBack(boolean v)
 	{
-		this._committedOrRolledBack = v;
+		this.committedOrRolledBack = v;
 	}
 
 	private void setDisposed(boolean v)
 	{
-		this._disposed = v;
+		this.disposed = v;
 	}
 
 	public Connection getConnection()
 	{
-		return this._conn;
+		return this.connection;
 	}
 
 	public DataAccessTransaction() throws Exception 
 	{
-		this._conn = ConnectionProvider.getConnection();
+		this.connection = ConnectionProvider.getConnection();
 		this.setCommittedOrRolledBack(false);
 		this.setDisposed(false);
 
-		this._conn.setAutoCommit(false);
+		this.connection.setAutoCommit(false);
 	}
 
 	@Override
 	public void commit() throws Exception 
 	{
-		this._conn.commit();
+		this.connection.commit();
 		this.setCommittedOrRolledBack(true);
 		this.close();
 	}
@@ -43,7 +43,7 @@ class DataAccessTransaction implements IDataAccessTransaction
 	@Override
 	public void rollback() throws Exception 
 	{
-		this._conn.rollback();
+		this.connection.rollback();
 		this.setCommittedOrRolledBack(true);
 		this.close();
 	}
@@ -51,10 +51,10 @@ class DataAccessTransaction implements IDataAccessTransaction
 	@Override
 	public void close() throws Exception 
 	{
-		if(this._disposed) return;
-		if(!this._committedOrRolledBack) this._conn.rollback();
+		if (this.disposed) return;
+		if (!this.committedOrRolledBack) this.connection.rollback();
 
-		this._conn.close();
+		ConnectionProvider.close(this.connection);
 
 		this.setDisposed(true);
 	}
